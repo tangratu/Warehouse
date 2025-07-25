@@ -1,4 +1,4 @@
-package objects;
+package com.warehouse.Bot.objects;
 
 public class Cell {
     private int x;
