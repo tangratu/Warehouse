@@ -23,7 +23,7 @@
 			<button id="submitOrd" [disabled]="!addformgrp.valid">Add to order</button>
 		 </form>
 		 <button id="clearBtn" (click)="clearOrd()">Clear order</button>
-		 <button id="orderBtn" (click)="placeOrd()" >Place order</button>
+		 <button id="orderBtn" (click)="placeOrd()" [disabled]="order.size<=0" >Place order</button>
 		</div>
   </div>
 
