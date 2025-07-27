@@ -26,38 +26,38 @@ public class ProductDAO {
     }
 
     public List<Product> getAll(){
-        String sql = "select * from Products";
+        String sql = "select * from products";
         List<Product> res = jc.sql(sql).query(prm).list();
         return res;
     }
      public Product getByName(String name){
-        String sql = "select * from Products where name like ?";
+        String sql = "select * from products where name like ?";
         return jc.sql(sql).param(name).query(prm).single();
      }
      public Product getById(int id){
-        String sql = "select * from Products where id=?";
+        String sql = "select * from products where id=?";
         return jc.sql(sql).param(id).query(prm).single();
      }
     public Product create(ProtoProduct p){
-        String sql = "insert into Products(name,price,quantity,X,Y) values(?,?,?,?,?)";
+        String sql = "insert into products(name,price,quantity,x,y) values(?,?,?,?,?)";
         KeyHolder kh = new GeneratedKeyHolder();
-        jc.sql(sql).params(p.getName(),p.getPrice(),p.getQuantity(),p.getLocation().getX(),p.getLocation().getY()).update(kh);
+        jc.sql(sql).params(p.getName(),p.getPrice(),p.getQuantity(),p.getLocation().getX(),p.getLocation().getY()).update(kh,"id");
         return getById((Integer) kh.getKey());
     }
     public void update(Product p){
-        String sql = "update Products set name=?,price=?,quantity=?,X=?,Y=? where id=?";
+        String sql = "update products set name=?,price=?,quantity=?,x=?,y=? where id=?";
 
         jc.sql(sql).params(p.getName(),p.getPrice(),p.getQuantity(),p.getLocation().getX(),p.getLocation().getY(),p.getId()).update();
 
     }
     public Product update(ProtoProduct p, int id){
-        String sql = "update Products set name=?,price=?,quantity=?,X=?,Y=? where id=?";
+        String sql = "update products set name=?,price=?,quantity=?,x=?,y=? where id=?";
         KeyHolder kh = new GeneratedKeyHolder();
-        jc.sql(sql).params(p.getName(),p.getPrice(),p.getQuantity(),p.getLocation().getX(),p.getLocation().getY(),id).update();
+        jc.sql(sql).params(p.getName(),p.getPrice(),p.getQuantity(),p.getLocation().getX(),p.getLocation().getY(),id).update(kh,"id");
         return getById((Integer) kh.getKey());
     }
     public void delete(int id){
-        String sql = "delete from Products where id=?";
+        String sql = "delete from products where id=?";
         jc.sql(sql).param(id).update();
     }
     public void fulfillOrder(String order){

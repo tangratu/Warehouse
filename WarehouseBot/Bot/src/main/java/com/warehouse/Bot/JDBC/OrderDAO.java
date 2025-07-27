@@ -63,14 +63,14 @@ public class OrderDAO {
 
         if(possibleOrder(order)){
             String sql = "insert into Orders(status,contents,message) values(?,?,?)";
-            jc.sql(sql).params("SUCCESS",contents,"All items available, order fulfilled").update(kh);
-            rdao.create(order, (Integer) kh.getKey());
-            return getById((Integer) kh.getKey()); //this whole keyholder getbyid can be replaced by a template method
+            jc.sql(sql).params("SUCCESS",contents,"All items available, order fulfilled").update(kh,"id");
+            rdao.create(order, (Integer) kh.getKey()); //change this to just return whole key instead of calling getById
+            return getById((Integer) kh.getKey());
 
         }
         else{
             String sql = "insert into Orders(status,contents,message) values(?,?,?)";
-            jc.sql(sql).params("FAIL",order,"Not enough stock to fulfill the order").update(kh);
+            jc.sql(sql).params("FAIL",order,"Not enough stock to fulfill the order").update(kh,"id");
             return getById((Integer) kh.getKey());
         }
     }

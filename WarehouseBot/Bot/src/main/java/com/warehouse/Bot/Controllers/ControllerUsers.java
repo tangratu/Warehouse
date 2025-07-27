@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "${api.url.start}/users:/placeholder/users")
+@RequestMapping(path = "${api.url.start}/users")
 public class ControllerUsers {
     private final UserDAO udao;
 
@@ -25,11 +25,11 @@ public class ControllerUsers {
     public ResponseEntity<SessionUser> getById(@PathVariable int id){
         return new ResponseEntity<>(udao.getById(id), HttpStatus.OK);
     }
-    @PostMapping(value = "/create")
+    @PostMapping()
     public ResponseEntity<SessionUser> create(@RequestBody ProtoUser pu){
         return new ResponseEntity<>(udao.create(pu),HttpStatus.CREATED);
     }
-    @GetMapping(value = "/verify")
+    @PostMapping(value = "/verify")
     public ResponseEntity<Optional<SessionUser>> verify(@RequestBody Map<String,String> info){
         return new ResponseEntity<>(udao.verify(info.get("username"),info.get("password")),HttpStatus.OK);
     }

@@ -37,7 +37,7 @@ public class UserDAO {
         KeyHolder kh = new GeneratedKeyHolder();
         String encodedPass = encoder.encode(u.getPassword());
         String sql = "insert into Users(name,email,address,password_hash) values(?,?,?,?)";
-        jc.sql(sql).params(u.getName(),u.getEmail(),u.getAddress(),encodedPass).update(kh);
+        jc.sql(sql).params(u.getName(),u.getEmail(),u.getAddress(),encodedPass).update(kh,"id");
         return getById((Integer) kh.getKey()); //needs try-catch
     }
 

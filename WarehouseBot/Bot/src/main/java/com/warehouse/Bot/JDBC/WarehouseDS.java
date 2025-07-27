@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 @Configuration
-//@ComponentScan
+@ComponentScan
 public class WarehouseDS {
     @Bean
     public static DataSource PostGreSQLDataSource(){
