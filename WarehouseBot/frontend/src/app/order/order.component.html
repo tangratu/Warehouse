@@ -1,2 +1,38 @@
-<p>order works!</p>
-<a routerLink="../product" routerLinkActive="active" ariaCurrentWhenActive="page" class="bypass">Add product</a>
+<body>
+	<nav class="topbar">
+		<a routerLink="../product" routerLinkActive="active"  >Create product</a>
+		<a routerLink="../order" routerLinkActive="active" >Create order</a>
+	</nav>
+	<div class="main">
+		<div class="left" id="textList">
+			<ul id="orderList">
+				<li *ngFor="let item of orderItems">{{ item }}</li>
+			</ul>
+		</div>
+
+		
+		<div class="right">
+		 <form [formGroup]="addformgrp" (ngSubmit)="addProduct()">
+			<select id="dropdown" formControlName="product">
+				<option value="" disabled selected>Select product</option>
+				@for(prod of prodOptions$ | async ; track prod.name) {
+					<option [ngValue]="prod">{{ prod.name }}</option>
+				}				
+			</select>
+			<input type="number" formControlName="qty" id="qty" min="1" placeholder="quantity"/>
+			<button id="submitOrd" [disabled]="!addformgrp.valid">Add to order</button>
+		 </form>
+		 <button id="clearBtn" (click)="clearOrd()">Clear order</button>
+		 <button id="orderBtn" (click)="placeOrd()" >Place order</button>
+		</div>
+  </div>
+
+  
+  <div class="bottom" >
+	 <p>Current total: {{totalPrice}}</p>
+	 <p>Last status: {{status}}</p>
+	 <p>Last route: {{route}}</p>
+   
+  </div>
+
+</body>

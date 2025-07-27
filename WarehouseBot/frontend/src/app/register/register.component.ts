@@ -21,7 +21,7 @@ export class RegisterComponent {
 	
 		password: new FormControl<string>('',[Validators.required]),
 		address: new FormControl<string>('',[Validators.required,Validators.maxLength(40)]),
-		email: new FormControl<string>('',[Validators.required,Validators.maxLength(45)]),
+		email: new FormControl<string>('',[Validators.required,Validators.email]),
 });
     onSubmit(): void {
 		

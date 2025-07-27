@@ -1,20 +1,24 @@
 <main class="main">
+ <nav class="topbar">
+		<a routerLink="../product" routerLinkActive="active"  >Create product</a>
+		<a routerLink="../order" routerLinkActive="active" >Create order</a>
+ </nav>
  <div class="form">
   <p class="formtitle">Product creation form</p>
-  <form [formGroup]="prodformgrp" (ngSubmit)="onSubmit()">      
+  <form [formGroup]="prodformgrp" (ngSubmit)="onCreate()">      
    <label for="name">Name </label>
    <input type="text" formControlName="name" id="name"  class="inputfield"/>
    <label for="price">Price </label>
    <input type="number" formControlName="price" id="price"  class="inputfield"/>
    <label for="quantity">quantity </label>
-   <input type="number" formControlName=quantity" id="quantity"  class="inputfield"/>
+   <input type="number" formControlName="quantity" id="quantity"  class="inputfield"/>
    <label for="x">X </label>
    <input type="number" formControlName="x_coord" id="x"  class="inputfield"/>
    <label for="y">Y</label>
    <input type="number" formControlName="y_coord" id="y" class="inputfield"/>
    <button type="submit" class="createbtn" [disabled]="!prodformgrp.valid">Create</button>
   </form>
-  <a routerLink="../order" routerLinkActive="active" ariaCurrentWhenActive="page" class="bypass">Back to orders</a>
+  
   
  </div>
 </main>

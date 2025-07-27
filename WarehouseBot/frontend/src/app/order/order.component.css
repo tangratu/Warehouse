@@ -1,0 +1,60 @@
+body {
+      
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    
+    .topbar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .topbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    
+
+    .main {
+      flex: 1;
+      display: flex;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .left {
+      flex: 3;
+      margin-right: 16px;
+      border: 1px solid #ccc;
+      padding: 8px;
+      overflow-y: auto;
+      max-height: 100%;
+    }
+
+    .right {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .right select,
+    .right input,
+    .right button {
+      padding: 8px;
+      font-size: 1rem;
+    }
+
+    .bottom {
+      height: 150px;
+      border-top: 1px solid #ccc;
+      padding: 16px;
+      overflow-y: auto;
+    }

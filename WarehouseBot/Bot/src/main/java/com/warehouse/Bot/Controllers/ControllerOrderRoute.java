@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "${api.url.start}/orders:/placeholder/orders")
+@RequestMapping(value = "${api.url.start}/orders")
 public class ControllerOrderRoute {
     private final OrderDAO odao ;
     private final RouteDAO rdao;
@@ -22,7 +22,7 @@ public class ControllerOrderRoute {
         rdao=r;
     }
 
-    @PutMapping()
+    @PostMapping()
     public ResponseEntity<Order> create(@RequestBody Map<String,Integer> order){
         return new ResponseEntity<>(odao.create(order), HttpStatus.CREATED);
     }
@@ -32,8 +32,9 @@ public class ControllerOrderRoute {
         return new ResponseEntity<>(odao.getById(id),HttpStatus.OK);
     }
     @GetMapping(value="/route")
-    public ResponseEntity<String> getRoute(@RequestParam int order_id){
-        return new ResponseEntity<>(rdao.getRoute(order_id),HttpStatus.OK);
+    public ResponseEntity<Map<String,String>> getRoute(@RequestParam int order_id){
+
+        return new ResponseEntity<>(Map.of("route",rdao.getRoute(order_id)),HttpStatus.OK);
     }
 
 

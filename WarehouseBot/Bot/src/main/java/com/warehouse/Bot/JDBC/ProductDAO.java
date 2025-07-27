@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class ProductDAO {
@@ -39,8 +41,19 @@ public class ProductDAO {
         return jc.sql(sql).param(id).query(prm).single();
      }
     public Product create(ProtoProduct p){
-        String sql = "insert into products(name,price,quantity,x,y) values(?,?,?,?,?)";
+        String sql = "select * from products where x=? AND y=?";
         KeyHolder kh = new GeneratedKeyHolder();
+        Optional<Product> existing = jc.sql(sql).params(p.getLocation().getX(),p.getLocation().getY()).query(prm).optional();
+        if(existing.isPresent()){
+            if(p.getName().equals(existing.get().getName())){
+                sql="update products set quantity = quantity+?";
+                jc.sql(sql).param(p.getQuantity()).update(kh,"id");
+                return getById((Integer) kh.getKey());
+            }
+            return existing.get(); //add proper return for already existing object at given location
+        }
+         sql = "insert into products(name,price,quantity,x,y) values(?,?,?,?,?)";
+
         jc.sql(sql).params(p.getName(),p.getPrice(),p.getQuantity(),p.getLocation().getX(),p.getLocation().getY()).update(kh,"id");
         return getById((Integer) kh.getKey());
     }
@@ -60,13 +73,21 @@ public class ProductDAO {
         String sql = "delete from products where id=?";
         jc.sql(sql).param(id).update();
     }
-    public void fulfillOrder(String order){
-        String[] splitOrder = order.split(",");
-        for (int i = 0; i < splitOrder.length ; i++) {
-            Product temp = getByName(splitOrder[i].split("x")[0]);
-            temp.setQuantity(temp.getQuantity()-Integer.parseInt(splitOrder[i].split("x")[1])); // find something better than this
-            update(temp); //combine this all into 1 update is probably better
+    public void fulfillOrder(Map<String,Integer> order){
+        StringBuilder values = new StringBuilder();
+        for(String str : order.keySet()){
+            values.append('(');
+            values.append('\'');
+            values.append(str);
+            values.append('\'');
+            values.append(',');
+            values.append(order.get(str));
+            values.append("),");
         }
+        values.deleteCharAt(values.length()-1);
+        String sql = String.format("update \"Warehouse\".products p set quantity= p.quantity - d.quantity from" +
+                " (values %s) as d(name,quantity) where p.name=d.name",values.toString());
+        jc.sql(sql).update();
     }
 
 }

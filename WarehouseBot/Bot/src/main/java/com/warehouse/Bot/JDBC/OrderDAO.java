@@ -23,15 +23,17 @@ public class OrderDAO {
     private final ProductMapper prm;
     private final OrderMapper orm;
     private final RouteDAO rdao;
+    private final ProductDAO pdao;
 
 
     @Autowired
-    public OrderDAO(DataSource d,RouteDAO r){
+    public OrderDAO(DataSource d,RouteDAO r, ProductDAO p){
         ds=d;
         prm = new ProductMapper();
         orm = new OrderMapper();
         jc = JdbcClient.create(ds);
         rdao=r;
+        pdao=p;
     }
     public boolean possibleOrder(Map<String,Integer> order){
 
@@ -47,7 +49,7 @@ public class OrderDAO {
 
     }
     public Order getById(int id){
-        String sql = "Select id,status,message from orders where id=?";
+        String sql = "Select * from orders where id=?";
         return jc.sql(sql).param(id).query(orm).single();
     }
     public Order create(Map<String,Integer> order){
@@ -62,20 +64,21 @@ public class OrderDAO {
         contents.deleteCharAt(contents.length()-1);
 
         if(possibleOrder(order)){
-            String sql = "insert into Orders(status,contents,message) values(?,?,?)";
+            String sql = "insert into orders(status,contents,message) values(?,?,?)";
             jc.sql(sql).params("SUCCESS",contents,"All items available, order fulfilled").update(kh,"id");
-            rdao.create(order, (Integer) kh.getKey()); //change this to just return whole key instead of calling getById
+            rdao.create(order, (Integer) kh.getKey());
+            pdao.fulfillOrder(order);
             return getById((Integer) kh.getKey());
 
         }
         else{
-            String sql = "insert into Orders(status,contents,message) values(?,?,?)";
-            jc.sql(sql).params("FAIL",order,"Not enough stock to fulfill the order").update(kh,"id");
+            String sql = "insert into orders(status,contents,message) values(?,?,?)";
+            jc.sql(sql).params("FAIL",contents,"Not enough stock to fulfill the order").update(kh,"id");
             return getById((Integer) kh.getKey());
         }
     }
     public String getStatus(int id){
-        String sql = "select status from Orders where id=?";
+        String sql = "select status from orders where id=?";
         return (String) jc.sql(sql).param(id).query().singleValue();
     }
 

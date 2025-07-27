@@ -29,7 +29,9 @@ public class RouteDAO {
     public List<Product> getProductsAsList(Map<String,Integer> order){
         StringBuilder products = new StringBuilder();
         for (String str: order.keySet()){
+            products.append('\'');
             products.append(str);
+            products.append('\'');
             products.append(",");
         }
         products.deleteCharAt(products.length()-1);
@@ -50,13 +52,13 @@ public class RouteDAO {
         }
         toVisit[0] = new Cell(0,0);
 
-        jc.sql(String.format("insert into Routes(route,order_id) values(?,?)"))
+        jc.sql(String.format("insert into routes(route,order_id) values(?,?)"))
                 .param(BotPathing.PlanRoute(toVisit)).param(id).update();
 
 
     }
     public String getRoute(int orderId){
-        String sql = "select route from Routes where order_id =?";
+        String sql = "select route from routes where order_id =?";
         return (String) jc.sql(sql).param(orderId).query().singleValue();
     }
 
